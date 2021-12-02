@@ -1,5 +1,5 @@
 export default class Model {
-  primaryKey = 'id';
+  _primaryKey = 'id';
 
   constructor(attributes) {
     this.fill(attributes);
@@ -25,16 +25,8 @@ export default class Model {
   }
 
   parseAttribute(value, defaultValue) {
-    if (value === 0 || value === null || value === false) {
-      return value;
-    }
-
-    if (defaultValue instanceof Function) {
-      return defaultValue.make(value);
-    }
-
     if (Array.isArray(defaultValue)) {
-      if (value === []) {
+      if (value === [] || value === null || value === undefined) {
         return null;
       }
 
@@ -43,7 +35,15 @@ export default class Model {
       }) : [];
     }
 
-    return value;
+    if (value === null || value === undefined) {
+      return defaultValue;
+    }
+
+    if (defaultValue instanceof Function) {
+      return defaultValue.make(value);
+    }
+
+    return defaultValue.constructor(value);
   }
 
   is(model) {
@@ -51,7 +51,7 @@ export default class Model {
       return false;
     }
 
-    return this[this.primaryKey] === model[model.primaryKey] && this.constructor === model.constructor;
+    return this[this._primaryKey] === model[model._primaryKey] && this.constructor === model.constructor;
   }
 
   static make(attributes) {

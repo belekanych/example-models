@@ -3,6 +3,7 @@ The idea is to use classes on the frontend with the same structure and approache
 
 ## Benefits
 * The same model structure may be used everywhere instead of working with different objects on different pages.
+* Attributes always have same types.
 * Attributes are automatically filled with default values.
 * Related models are used in the same way on different pages.
 * Constants related to a model are defined inside the model.
@@ -29,7 +30,7 @@ export default class Order extends Model {
   }
 }
 ```
-The model instance will be automatically filled with these values. You may use all JavaScript types.
+The model instance will be automatically filled with these values. You may use all JavaScript types.  Passed attributes are automatically casted to the type specified in the `defaults` method.
 
 ### Relations
 If you want to define a relation, specify it in the `default` method using the already created model class:
